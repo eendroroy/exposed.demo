@@ -4,8 +4,8 @@ spring:
   datasource:
     driverClassName: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/exposed_demo
-    username: indrajit
-    password:
+    username: user
+    password: pass
     hikari:
       max-lifetime: 600000
       connectionTimeout: 5000
