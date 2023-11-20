@@ -11,7 +11,7 @@ import org.jetbrains.exposed.dao.id.EntityID
 class User(id: EntityID<Long>) : LongEntity(id) {
     companion object : LongEntityClass<User>(Users)
 
-    var name by Users.userName
+    var userName by Users.userName
     var email by Users.email
     var mobileNumber by Users.mobileNumber
 
