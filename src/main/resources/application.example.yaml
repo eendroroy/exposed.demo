@@ -20,3 +20,10 @@ spring:
     show_sql: true
   jpa:
     open-in-view: false
+auth:
+  token:
+    secret: secret
+    issuer: issuer
+    subject: subject
+    audience: audience
+    validity_minutes: 1400

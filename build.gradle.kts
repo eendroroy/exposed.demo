@@ -20,12 +20,14 @@ repositories {
 }
 
 dependencies {
-//	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.jetbrains.exposed:exposed-spring-boot-starter:0.44.1")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
+
+    implementation("com.auth0:java-jwt:4.0.0")
 
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
 	runtimeOnly("org.postgresql:postgresql")
