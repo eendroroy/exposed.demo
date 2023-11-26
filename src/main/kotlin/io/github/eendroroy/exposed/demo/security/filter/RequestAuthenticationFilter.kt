@@ -94,7 +94,8 @@ class RequestAuthenticationFilter(
 
     companion object {
         private val EXCLUDED_PATHS = listOf(
-            "/api/v1/token/create"
+            "/api/v1/user/register",
+            "/api/v1/token/create",
         )
 
         private val LOGGER = LoggerFactory.getLogger(RequestAuthenticationFilter::class.java)

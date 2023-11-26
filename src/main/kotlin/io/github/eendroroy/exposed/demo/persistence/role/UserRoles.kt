@@ -1,14 +1,17 @@
 package io.github.eendroroy.exposed.demo.persistence.role
 
+import io.github.eendroroy.exposed.demo.persistence.core.BaseLongIdTable
 import io.github.eendroroy.exposed.demo.persistence.user.Users
+import org.jetbrains.exposed.dao.EntityChangeType
+import org.jetbrains.exposed.dao.EntityHook
 import org.jetbrains.exposed.dao.id.LongIdTable
+import org.jetbrains.exposed.dao.toEntity
+import org.jetbrains.exposed.sql.javatime.CurrentDateTime
 import org.jetbrains.exposed.sql.javatime.datetime
 
-object UserRoles : LongIdTable("user_roles") {
+object UserRoles : BaseLongIdTable("user_roles") {
     val role = text("role", eagerLoading = true)
     val user = reference("user", Users)
-    val createdAt = datetime("created_at")
-    val updatedAt = datetime("updated_at")
 
     init {
         uniqueIndex(role, user)

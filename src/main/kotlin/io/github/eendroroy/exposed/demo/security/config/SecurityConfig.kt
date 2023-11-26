@@ -20,7 +20,10 @@ class SecurityConfig(private val requestAuthenticationFilter: RequestAuthenticat
         }.cors {
             it.disable()
         }.authorizeHttpRequests {
-            it.requestMatchers("/api/v1/token/create").permitAll().anyRequest().authenticated()
+            it.requestMatchers(
+                "/api/v1/user/register",
+                "/api/v1/token/create"
+            ).permitAll().anyRequest().authenticated()
         }.sessionManagement {
             it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         }.exceptionHandling {
@@ -29,7 +32,6 @@ class SecurityConfig(private val requestAuthenticationFilter: RequestAuthenticat
 
         return http.build()
     }
-
 
     @Bean
     fun jwtRequestFilterRegistration(): FilterRegistrationBean<RequestAuthenticationFilter> {

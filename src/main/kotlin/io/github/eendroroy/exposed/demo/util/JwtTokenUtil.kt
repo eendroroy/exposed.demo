@@ -16,18 +16,21 @@ import java.util.Date
 class JwtTokenUtil(private val config: TokenConfig) : Serializable {
     private val algorithm: Algorithm = Algorithm.HMAC256(config.secret)
 
-    fun createToken(userName: String, roles: List<String>): String {
+    fun createToken(userName: String, roles: List<String>): Pair<String, LocalDateTime> {
+        val expiresAt = expiresAt()
         return JWT.create()
             .withClaim(RegisteredClaims.ISSUER, config.issuer)
             .withClaim(RegisteredClaims.SUBJECT, config.subject)
             .withClaim(RegisteredClaims.ISSUED_AT, Date())
             .withClaim(RegisteredClaims.NOT_BEFORE, Date())
-            .withClaim(RegisteredClaims.EXPIRES_AT, expiresAt())
+            .withClaim(RegisteredClaims.EXPIRES_AT, expiresAt.atZone(ZoneId.systemDefault()).toInstant())
             .withClaim(RegisteredClaims.AUDIENCE, config.audience)
             .withClaim(RegisteredClaims.JWT_ID, System.currentTimeMillis())
             .withClaim(CustomJwtClaims.USER_NAME, userName)
             .withClaim(CustomJwtClaims.ROLES, roles)
-            .sign(algorithm)
+            .sign(algorithm).let {
+                Pair(it, expiresAt)
+            }
     }
 
     fun decodedToken(token: String): DecodedJWT {
@@ -35,9 +38,7 @@ class JwtTokenUtil(private val config: TokenConfig) : Serializable {
         return verifier.verify(token)
     }
 
-    private fun expiresAt(): Date {
-        return Date.from(
-            LocalDateTime.now().plusMinutes(config.validityMinutes).atZone(ZoneId.systemDefault()).toInstant()
-        )
+    private fun expiresAt(): LocalDateTime {
+        return LocalDateTime.now().plusMinutes(config.validityMinutes)
     }
 }
