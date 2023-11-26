@@ -10,4 +10,7 @@ class UserRole(id: EntityID<Long>) : LongEntity(id) {
 
     var role by UserRoles.role
     var user by User referencedOn UserRoles.user
+
+    var createdAt by UserRoles.createdAt
+    var updatedAt by UserRoles.updatedAt
 }

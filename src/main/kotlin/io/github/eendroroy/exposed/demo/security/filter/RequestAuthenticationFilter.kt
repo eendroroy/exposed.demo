@@ -8,11 +8,11 @@ import io.github.eendroroy.exposed.demo.security.service.impl.UserDetailsService
 import io.github.eendroroy.exposed.demo.util.JwtTokenUtil
 import io.github.eendroroy.exposed.demo.util.getRoles
 import io.github.eendroroy.exposed.demo.util.getUserName
+import io.github.eendroroy.exposed.demo.util.md5
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
-import org.slf4j.MDC
 import org.springframework.http.HttpHeaders
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -27,9 +27,7 @@ class RequestAuthenticationFilter(
 ) : OncePerRequestFilter() {
     override fun shouldNotFilter(request: HttpServletRequest): Boolean {
         with(request.servletPath) {
-            EXCLUDED_PATHS.forEach {
-                if (this.startsWith(it)) return true
-            }
+            EXCLUDED_PATHS.forEach { if (this.startsWith(it)) return true }
         }
         return false
     }
@@ -61,10 +59,10 @@ class RequestAuthenticationFilter(
             try {
                 val userDetails = userDetailsService.loadUserByUsername(decodedToken.getUserName())
 
-//                if (userDetails.user.tokenHash != token.md5()) {
-//                    LOGGER.error("Token hash did not match")
-//                    return
-//                }
+                if (userDetails.user.tokenHash != token.md5()) {
+                    LOGGER.error("Token hash did not match")
+                    return
+                }
 
                 if (checkValidAndSetAttributes(decodedToken, request)) {
                     val usernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken(
@@ -73,8 +71,6 @@ class RequestAuthenticationFilter(
 
                     usernamePasswordAuthenticationToken.details = WebAuthenticationDetailsSource().buildDetails(request)
                     SecurityContextHolder.getContext().authentication = usernamePasswordAuthenticationToken
-
-                    MDC.put("currentUser", userDetails.name)
                 }
 //            } catch (ex: UserNotEnabledException) {
 //                LOGGER.error(ex.localizedMessage, ex)

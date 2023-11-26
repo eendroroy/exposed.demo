@@ -15,6 +15,13 @@ class User(id: EntityID<Long>) : LongEntity(id) {
     var email by Users.email
     var mobileNumber by Users.mobileNumber
 
+    var tokenHash by Users.tokenHash
+    var tokenCreatedAt by Users.tokenCreatedAt
+    var tokenValidTill by Users.tokenValidTill
+
     val roles by UserRole referrersOn UserRoles.user
     val tasks by Task referrersOn Tasks.user
+
+    var createdAt by Users.createdAt
+    var updatedAt by Users.updatedAt
 }
