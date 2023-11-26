@@ -1,14 +1,15 @@
 package io.github.eendroroy.exposed.demo.security.model
 
+import io.github.eendroroy.exposed.demo.persistence.role.UserRole
 import io.github.eendroroy.exposed.demo.persistence.user.User
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import java.security.Principal
 
-class UserDetail(val user: User) : UserDetails, Principal {
+class UserDetail(val user: User, private val roles: List<UserRole>) : UserDetails, Principal {
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        return user.roles.mapTo(ArrayList()) { SimpleGrantedAuthority(it.role) }
+        return roles.mapTo(ArrayList()) { SimpleGrantedAuthority(it.role) }
     }
 
     override fun getPassword(): String {

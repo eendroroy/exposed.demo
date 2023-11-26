@@ -8,7 +8,10 @@ import org.jetbrains.exposed.dao.id.EntityID
 class Task(id: EntityID<Long>) : BaseLongEntity(id, Tasks) {
     companion object : LongEntityClass<Task>(Tasks)
 
-    var taskName by Tasks.taskName
-    var details by Tasks.taskDetails
+    var title by Tasks.title
+    var description by Tasks.description
+    var dueAt by Tasks.dueAt
+    var completedAt by Tasks.completedAt
+
     var user by User referencedOn Tasks.user
 }
