@@ -3,10 +3,12 @@ package io.github.eendroroy.exposed.demo.controller.api.v1
 import io.github.eendroroy.exposed.demo.controller.api.BaseApiController
 import io.github.eendroroy.exposed.demo.dto.request.TaskRequest
 import io.github.eendroroy.exposed.demo.dto.response.BaseResponse
+import io.github.eendroroy.exposed.demo.dto.response.MessageResponse
 import io.github.eendroroy.exposed.demo.dto.response.TaskResponse
 import io.github.eendroroy.exposed.demo.mapper.toTaskResponse
 import io.github.eendroroy.exposed.demo.service.TaskService
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -32,7 +34,6 @@ class TaskController(private val taskService: TaskService) : BaseApiController()
 
     @PostMapping("/create")
     fun createTask(@RequestBody request: TaskRequest): ResponseEntity<BaseResponse<TaskResponse>> {
-
         val task = taskService.create(currentUser(), request)
 
         return ResponseEntity.ok(
@@ -54,6 +55,22 @@ class TaskController(private val taskService: TaskService) : BaseApiController()
         return ResponseEntity.ok(
             BaseResponse(
                 data = task.toTaskResponse(),
+                success = true,
+                errorMessages = emptyList()
+            )
+        )
+    }
+
+    @DeleteMapping("/delete/{id}")
+    fun deleteTask(@PathVariable id: Long): ResponseEntity<BaseResponse<MessageResponse>> {
+        val deleted = taskService.delete(id)
+
+        return ResponseEntity.ok(
+            BaseResponse(
+                data = MessageResponse(
+                    "Task Deleted $deleted",
+                    "Task Deleted $deleted",
+                ),
                 success = true,
                 errorMessages = emptyList()
             )

@@ -5,6 +5,9 @@ import io.github.eendroroy.exposed.demo.persistence.task.Task
 import io.github.eendroroy.exposed.demo.persistence.task.Tasks
 import io.github.eendroroy.exposed.demo.persistence.user.User
 import io.github.eendroroy.exposed.demo.service.TaskService
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.varPop
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -34,5 +37,10 @@ class TaskServiceImpl : TaskService {
         task.dueAt = request.dueAt
 
         return task
+    }
+
+    @Transactional
+    override fun delete(taskId: Long): Int {
+        return Tasks.deleteWhere { Tasks.id eq taskId }
     }
 }
